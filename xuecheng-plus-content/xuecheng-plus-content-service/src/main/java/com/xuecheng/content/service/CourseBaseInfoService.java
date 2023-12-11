@@ -2,6 +2,8 @@ package com.xuecheng.content.service;
 
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
+import com.xuecheng.content.model.dto.AddCourseDto;
+import com.xuecheng.content.model.dto.CourseBaseInfoDto;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
 
@@ -21,5 +23,15 @@ public interface CourseBaseInfoService {
      * @date: 2023/10/26 下午 05:01
      */
     PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto);
+
+    /*
+     * @description 添加課程基本信息
+     * @param companyId  教學機構id
+     * @param addCourseDto  課程基本信息
+     * @return: com.xuecheng.content.model.dto.CourseBaseInfoDto
+     * @author: Ian Wang
+     * @date: 2023/11/11 上午 10:17
+     */
+    CourseBaseInfoDto createCourseBase(Long companyId, AddCourseDto addCourseDto);
 
 }
