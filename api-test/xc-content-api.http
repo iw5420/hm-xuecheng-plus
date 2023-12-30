@@ -33,3 +33,7 @@ Content-Type: application/json
   "grade": "204001",
   "description": "java網路編程高級"
 }
+
+### 查詢課程信息
+GET {{content_host}}/content/course/40
+Content-Type: application/json
