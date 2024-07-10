@@ -9,6 +9,7 @@ import com.xuecheng.media.model.po.MediaFiles;
 import com.xuecheng.media.model.dto.UploadFileParamsDto;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -53,6 +54,16 @@ public interface MediaFileService {
  public MediaFiles addMediaFilesToDb(Long companyId,String fileMd5,UploadFileParamsDto uploadFileParamsDto,String bucket,String objectName);
 
  /**
+  * 將文件上傳到minio
+  * @param localFilePath 文件本地路徑
+  * @param mimeType 媒體類型
+  * @param bucket 桶
+  * @param objectName 對象名
+  * @return
+  */
+ public boolean addMediaFilesToMinIO(String localFilePath,String mimeType,String bucket, String objectName);
+
+ /**
   * @description 檢查文件是否存在
   * @param fileMd5 文件的md5
   * @return com.xuecheng.base.model.RestResponse<java.lang.Boolean> false不存在，true存在
@@ -89,10 +100,18 @@ public interface MediaFileService {
   * @param chunkTotal 分塊總和
   * @param uploadFileParamsDto 文件信息
   * @return com.xuecheng.base.model.RestResponse
-  * @author Mr.M
-  * @date 2022/9/13 15:56
+  * @author Ian
+  * @date 2024/7/8
   */
  public RestResponse mergechunks(Long companyId,String fileMd5,int chunkTotal,UploadFileParamsDto uploadFileParamsDto);
 
+
+ /**
+  * 從minio下載文件
+  * @param bucket 桶
+  * @param objectName 對象名稱
+  * @return 下載後的文件
+  */
+ public File downloadFileFromMinIO(String bucket, String objectName);
 
 }

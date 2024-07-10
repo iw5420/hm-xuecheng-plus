@@ -9,10 +9,12 @@ import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.base.model.RestResponse;
 import com.xuecheng.media.mapper.MediaFilesMapper;
+import com.xuecheng.media.mapper.MediaProcessMapper;
 import com.xuecheng.media.model.dto.QueryMediaParamsDto;
 import com.xuecheng.media.model.dto.UploadFileParamsDto;
 import com.xuecheng.media.model.dto.UploadFileResultDto;
 import com.xuecheng.media.model.po.MediaFiles;
+import com.xuecheng.media.model.po.MediaProcess;
 import com.xuecheng.media.service.MediaFileService;
 import io.minio.*;
 import io.minio.messages.DeleteError;
@@ -51,6 +53,8 @@ public class MediaFileServiceImpl implements MediaFileService {
  @Autowired
  MediaFilesMapper mediaFilesMapper;
 
+ @Autowired
+ MediaProcessMapper mediaProcessMapper;
  //存儲普通文件
  @Value("${minio.bucket.files}")
  private String bucket_mediafiles;
@@ -178,12 +182,36 @@ public class MediaFileServiceImpl implements MediaFileService {
     log.error("保存文件信息到數據庫失敗,{}", mediaFiles.toString());
     XueChengPlusException.cast("保存文件信息失敗");
    }
+   //記錄待處理任務
+   addWaitingTask(mediaFiles);
    log.debug("保存文件信息到數據庫成功,{}", mediaFiles.toString());
 
   }
   return mediaFiles;
-
  }
+
+ /**
+  * 添加待處理任務
+  * @param mediaFiles 媒資文件信息
+  */
+ private void addWaitingTask(MediaFiles mediaFiles){
+  //文件名稱
+  String filename = mediaFiles.getFilename();
+  //文件擴展名
+  String extension = filename.substring(filename.lastIndexOf("."));
+  //文件mimeType
+  String mimeType = getMimeType(extension);
+  //如果是avi視頻添加到視頻待處理表
+  if(mimeType.equals("video/x-msvideo")){
+   MediaProcess mediaProcess = new MediaProcess();
+   BeanUtils.copyProperties(mediaFiles,mediaProcess);
+   mediaProcess.setStatus("1");//未處理
+   mediaProcess.setFailCount(0);//失敗次數默認為0
+   mediaProcess.setUrl(null);
+   mediaProcessMapper.insert(mediaProcess);
+  }
+ }
+
 
  @Override
  public RestResponse<Boolean> checkFile(String fileMd5) {
