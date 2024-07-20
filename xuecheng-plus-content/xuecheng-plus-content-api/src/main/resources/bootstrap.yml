@@ -29,9 +29,11 @@ spring:
           group: xuecheng-plus-common
           refresh: true
         - data-id: freemarker-config-${spring.profiles.active}.yaml
-            group: xuecheng-plus-common
-            refresh: true
-
+          group: xuecheng-plus-common
+          refresh: true
+        - data-id: feign-${spring.profiles.active}.yaml
+          group: xuecheng-plus-common
+          refresh: true  #profiles默認為dev
 
     #  datasource:
     #    driver-class-name: com.mysql.cj.jdbc.Driver

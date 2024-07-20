@@ -22,6 +22,7 @@ import io.minio.messages.DeleteObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -399,6 +400,13 @@ public class MediaFileServiceImpl implements MediaFileService {
   }
   return null;
  }
+
+ @Override
+ public MediaFiles getFileById(String mediaId) {
+      MediaFiles mediaFiles = mediaFilesMapper.selectById(mediaId);
+  return mediaFiles;
+ }
+
  /**
   * 得到合並後的文件的地址
   * @param fileMd5 文件id即md5值
@@ -448,7 +456,7 @@ public class MediaFileServiceImpl implements MediaFileService {
 
 
  @Override
- public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath) {
+ public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath, String objectName) {
   // 1將文件上傳minio
   // 2將文件信息保存到數據庫
   File file = new File(localFilePath);
@@ -466,7 +474,10 @@ public class MediaFileServiceImpl implements MediaFileService {
   //文件的默認目錄
   String defaultFolderPath = getDefaultFolderPath();
   //存儲到minio中的對象名(帶目錄)
-  String objectName = defaultFolderPath + fileMd5 + extension;
+  //存儲到minio中的對象名(帶目錄)
+  if(StringUtils.isEmpty(objectName)){
+   objectName =  defaultFolderPath + fileMd5 + extension;
+  }
   //將文件上傳到minio
   boolean result = addMediaFilesToMinIO(localFilePath, mimeType, bucket_mediafiles, objectName);
   if(!result)XueChengPlusException.cast("上傳文件失敗");

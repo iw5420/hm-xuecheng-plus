@@ -35,9 +35,10 @@ public interface MediaFileService {
   * @param companyId 機構id
   * @param uploadFileParamsDto 上傳文件信息
   * @param localFilePath 文件磁盤路徑
+  * @param objectName 對象名
   * @return 文件信息
   */
- public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath);
+ public UploadFileResultDto uploadFile(Long companyId, UploadFileParamsDto uploadFileParamsDto, String localFilePath, String objectName);
 
  /**
   * @description 將文件信息添加到文件表
@@ -114,4 +115,6 @@ public interface MediaFileService {
   */
  public File downloadFileFromMinIO(String bucket, String objectName);
 
+ // 根據媒資id查詢文件訊息
+ public MediaFiles getFileById(String mediaId);
 }

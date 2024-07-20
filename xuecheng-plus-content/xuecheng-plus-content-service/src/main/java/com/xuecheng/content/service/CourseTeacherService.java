@@ -1,4 +1,4 @@
-package com.xuecheng.content.service.impl;
+package com.xuecheng.content.service;
 
 import com.xuecheng.content.model.po.CourseTeacher;
 
