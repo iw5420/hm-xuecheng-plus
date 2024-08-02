@@ -44,7 +44,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     CourseCategoryMapper courseCategoryMapper;
 
     @Override
-    public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto courseParamsDto) {
+    public PageResult<CourseBase> queryCourseBaseList(Long companyId, PageParams pageParams, QueryCourseParamsDto courseParamsDto) {
         //拼裝查詢條件
         LambdaQueryWrapper<CourseBase> queryWrapper = new LambdaQueryWrapper<>();
         //根據名稱模糊查詢,在sql中拼接 course_base.name like '%值%'
@@ -52,7 +52,7 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         //根據課程審核狀態查詢 course_base.audit_status = ?
         queryWrapper.eq(StringUtils.isNotEmpty(courseParamsDto.getAuditStatus()), CourseBase::getAuditStatus,courseParamsDto.getAuditStatus());
         //todo:按課程發布狀態查詢
-
+        queryWrapper.eq(CourseBase::getCompanyId, companyId);
         //創建page分頁參數對象，參數:當前頁碼，每頁紀錄數
         Page<CourseBase> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
         //開始進行分頁查詢

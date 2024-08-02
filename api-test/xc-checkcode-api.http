@@ -1,0 +1,5 @@
+### 申請驗證碼
+POST {{checkcode_host}}/checkcode/pic
+
+### 校驗驗證碼
+POST {{checkcode_host}}/checkcode/verify?key=checkcode:ba32ba5fe28a40778b5d7e6efc9b72e9&code=SA6V

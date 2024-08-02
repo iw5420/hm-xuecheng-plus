@@ -38,7 +38,9 @@ public class GlobalExceptionHandler {
     public RestErrorResponse exception(Exception e) {
 
         log.error("【系統異常】{}",e.getMessage(),e);
-
+        if(e.getMessage().equals("拒絕存取")){
+            return new RestErrorResponse("沒有操作此功能的權限");
+        }
         return new RestErrorResponse(CommonError.UNKOWN_ERROR.getErrMessage());
 
     }

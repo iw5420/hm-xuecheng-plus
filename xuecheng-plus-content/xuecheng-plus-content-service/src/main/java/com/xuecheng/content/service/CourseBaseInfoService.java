@@ -19,11 +19,12 @@ public interface CourseBaseInfoService {
      * @description 課程查詢接口
      * @param pageParams 分頁參數
      * @param queryCourseParamsDto 查詢條件
+     * @param companyId 培訓機構id
      * @return com.xuecheng.base.model.PageResult<com.xuecheng.content.model.po.CourseBase>
      * @author Ian Wang
      * @date: 2023/10/26 下午 05:01
      */
-    public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto);
+    public PageResult<CourseBase> queryCourseBaseList(Long companyId, PageParams pageParams, QueryCourseParamsDto queryCourseParamsDto);
 
     /*
      * @description 添加課程基本信息

@@ -1,8 +1,15 @@
 ### 授權碼模式
 POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=authorization_code&code=lsjbEZ&redirect_uri=http://www.51xuecheng.cn
 
-### 密碼模式
+### 密碼模式(寫死)
 POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=zhangsan&password=123
 
+### 密碼模式(數據庫)
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username=t1&password=111111
+
 ###校驗jwt令牌
-POST {{auth_host}}/auth/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ6aGFuZ3NhbiIsInNjb3BlIjpbImFsbCJdLCJleHAiOjE3MjE2NTQzNDgsImF1dGhvcml0aWVzIjpbInAxIl0sImp0aSI6IjlhMjhhOTBjLTAyYzAtNDBmNS1iZGZhLTVlMDM1MmNhNmRmMSIsImNsaWVudF9pZCI6IlhjV2ViQXBwIn0.2gJ1osC25QaFT6Qs21EGFRrrcR3iNiT2COtUEyJ7k5c
+POST {{auth_host}}/auth/oauth/check_token?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlbmctcGx1cyJdLCJ1c2VyX25hbWUiOiJ7XCJjb21wYW55SWRcIjpcIjEyMzIxNDE0MjVcIixcImNyZWF0ZVRpbWVcIjpcIjIwMjItMDktMjhUMDg6MzI6MDNcIixcImlkXCI6XCI1MlwiLFwibmFtZVwiOlwiTeiAgeW4iFwiLFwic2V4XCI6XCIxXCIsXCJzdGF0dXNcIjpcIlwiLFwidXNlcm5hbWVcIjpcInQxXCIsXCJ1dHlwZVwiOlwiMTAxMDAyXCJ9Iiwic2NvcGUiOlsiYWxsIl0sImV4cCI6MTcyMTcwNjY0NSwiYXV0aG9yaXRpZXMiOlsicDEiXSwianRpIjoiNDIxYTMzYWEtZGJjMy00YzQ5LTg4MmUtNjQ0NjU5NDE1NzU2IiwiY2xpZW50X2lkIjoiWGNXZWJBcHAifQ.xfkFWuM0GfO5MW2uyftfKlcKw3KQlFW2RmrLJYyMpSc
+
+################擴展認證請求參數後######################
+###密碼模式
+POST {{auth_host}}/auth/oauth/token?client_id=XcWebApp&client_secret=XcWebApp&grant_type=password&username={"username":"stu1","authType":"password","password":"111111"}
