@@ -73,3 +73,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsieHVlY2hlb
 ### 查询课程发布信息
 GET {{content_host}}/content/r/coursepublish/2
 
+### 查詢課程信息
+GET {{gateway_host}}/content/course/40
+
+### 查詢課程信息
+GET {{gateway_host}}/content/course/whole/117

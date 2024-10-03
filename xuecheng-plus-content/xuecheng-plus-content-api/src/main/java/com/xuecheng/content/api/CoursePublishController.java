@@ -6,10 +6,7 @@ import com.xuecheng.content.service.CoursePublishService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -18,12 +15,18 @@ import org.springframework.web.servlet.ModelAndView;
  * @date 2024/7/10
  * @version 1.0
  */
-@Controller
+@RestController
 public class CoursePublishController {
 
     @Autowired
     CoursePublishService coursePublishService;
 
+    @GetMapping("/course/whole/{courseId}")
+    public CoursePreviewDto getPreviewInfo(@PathVariable("courseId") Long courseId) {
+        //获取课程预览信息
+        CoursePreviewDto coursePreviewInfo = coursePublishService.getCoursePreviewInfo(courseId);
+        return coursePreviewInfo;
+    }
 
     @GetMapping("/coursepreview/{courseId}")
     public ModelAndView preview(@PathVariable("courseId") Long courseId){

@@ -57,11 +57,4 @@ public class MyCourseTablesController {
         return  courseTablesService.getLearningStatus(userId, courseId);
 
     }
-
-    @ApiOperation("我的課程表")
-    @GetMapping("/mycoursetable")
-    public PageResult<XcCourseTables> mycoursetable(MyCourseTableParams params) {
-        return null;
-    }
-
 }
