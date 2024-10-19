@@ -1,6 +1,7 @@
 package com.xuecheng.content.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.xuecheng.base.exception.CommonError;
 import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.content.config.MultipartSupportConfig;
@@ -28,6 +29,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
@@ -40,6 +42,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @description TODO
@@ -74,6 +78,9 @@ public class CoursePublishServiceImpl implements CoursePublishService {
 
     @Autowired
     MediaServiceClient mediaServiceClient;
+
+    @Autowired
+    RedisTemplate redisTemplate;
 
     @Override
     public CoursePreviewDto getCoursePreviewInfo(Long courseId) {
@@ -244,6 +251,7 @@ public class CoursePublishServiceImpl implements CoursePublishService {
 
     @Override
     public CoursePublish getCoursePublish(Long courseId){
+        log.info("從數據庫查");
         CoursePublish coursePublish = coursePublishMapper.selectById(courseId);
         return coursePublish ;
     }
@@ -293,8 +301,29 @@ public class CoursePublishServiceImpl implements CoursePublishService {
         if(mqMessage==null){
             XueChengPlusException.cast(CommonError.UNKOWN_ERROR);
         }
-
-
     }
+
+    @Override
+    public CoursePublish getCoursePublishCache(Long courseId) {
+        //查詢緩存
+        Object jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+        if(jsonObj!=null){
+            String jsonString = jsonObj.toString();
+            log.info("從緩存查");
+            if ("null".equals(jsonString)) {
+                return  null;
+            }
+            CoursePublish coursePublish = JSONObject.parseObject(jsonString, CoursePublish.class);
+            return coursePublish;
+        }else{
+            log.info("從數據庫查詢");
+            CoursePublish coursePublish = getCoursePublish(courseId);
+            //if(coursePublish!=null){
+            redisTemplate.opsForValue().set("course:"+courseId, JSON.toJSONString(coursePublish), 30 + new Random().nextInt(100), TimeUnit.SECONDS);
+            //}
+            return coursePublish;
+        }
+    }
+
 
 }
