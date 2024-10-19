@@ -316,12 +316,25 @@ public class CoursePublishServiceImpl implements CoursePublishService {
             CoursePublish coursePublish = JSONObject.parseObject(jsonString, CoursePublish.class);
             return coursePublish;
         }else{
-            log.info("從數據庫查詢");
-            CoursePublish coursePublish = getCoursePublish(courseId);
-            //if(coursePublish!=null){
-            redisTemplate.opsForValue().set("course:"+courseId, JSON.toJSONString(coursePublish), 30 + new Random().nextInt(100), TimeUnit.SECONDS);
-            //}
-            return coursePublish;
+            synchronized (this){
+                jsonObj = redisTemplate.opsForValue().get("course:" + courseId);
+                if(jsonObj!=null){
+                    String jsonString = jsonObj.toString();
+                    log.info("從緩存查");
+                    if ("null".equals(jsonString)) {
+                        return  null;
+                    }
+                    CoursePublish coursePublish = JSONObject.parseObject(jsonString, CoursePublish.class);
+                    return coursePublish;
+                }
+                log.info("從數據庫查詢");
+                CoursePublish coursePublish = getCoursePublish(courseId);
+                //if(coursePublish!=null){
+                redisTemplate.opsForValue().set("course:"+courseId, JSON.toJSONString(coursePublish), 30 + new Random().nextInt(100), TimeUnit.SECONDS);
+                //}
+                return coursePublish;
+            }
+
         }
     }
 
